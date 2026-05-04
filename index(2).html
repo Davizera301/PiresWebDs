@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>&lt;pires/&gt; webdesign – Sites que vendem de verdade</title>
+  <meta name="description" content="Sites profissionais para pequenos negócios. Presença digital real em até 5 dias.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --black:   #000;
+      --dark:    #0a0a0a;
+      --darker:  #050505;
+      --surface: #111;
+      --surface2:#161616;
+      --green:   #00ff41;
+      --green2:  #00cc33;
+      --green-dim: rgba(0,255,65,.1);
+      --green-glow: rgba(0,255,65,.25);
+      --white:   #fff;
+      --grey:    #888;
+      --grey2:   #444;
+      --border:  rgba(0,255,65,.18);
+      --border2: rgba(255,255,255,.07);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Space Grotesk', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--black); color: var(--white); overflow-x: hidden; }
+
+    /* scanline */
+    body::before {
+      content:''; position:fixed; inset:0; z-index:9999; pointer-events:none;
+      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
+    }
+    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:var(--dark)} ::-webkit-scrollbar-thumb{background:var(--green)}
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1rem 6vw;
+      background:rgba(0,0,0,.9); border-bottom:1px solid var(--border);
+      backdrop-filter:blur(14px);
+      animation:fadeDown .5s ease both;
+    }
+    .logo-svg { font-family:var(--mono); font-size:1.2rem; font-weight:700; text-decoration:none; color:var(--white); }
+    .logo-svg .b { color:var(--green); }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a { font-family:var(--mono); font-size:.72rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--grey); text-decoration:none; transition:color .2s; }
+    .nav-links a::before { content:'//'; margin-right:.35rem; color:var(--green2); opacity:.5; }
+    .nav-links a:hover { color:var(--green); }
+    .nav-cta { font-family:var(--mono); font-size:.75rem; font-weight:800; letter-spacing:.06em; color:var(--black); background:var(--green); padding:.5rem 1.3rem; border-radius:3px; text-decoration:none; box-shadow:0 0 18px var(--green-glow); transition:box-shadow .2s,transform .2s; }
+    .nav-cta:hover { box-shadow:0 0 32px rgba(0,255,65,.55); transform:translateY(-1px); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+    .hamburger span { width:22px; height:2px; background:var(--green); }
+
+    .mobile-nav { display:none; position:fixed; inset:0; z-index:199; background:var(--darker); flex-direction:column; align-items:center; justify-content:center; gap:2.2rem; }
+    .mobile-nav.open { display:flex; }
+    .mobile-nav a { font-family:var(--mono); font-size:1.3rem; font-weight:700; color:var(--white); text-decoration:none; }
+    .mobile-nav a:hover { color:var(--green); }
+    .mobile-nav-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--grey); font-family:var(--mono); font-size:1.4rem; cursor:pointer; }
+
+    /* ── HERO ── */
+    .hero { min-height:100vh; display:flex; align-items:center; padding:8rem 6vw 5rem; position:relative; overflow:hidden; }
+    .hero::before {
+      content:''; position:absolute; inset:0; z-index:0;
+      background-image:linear-gradient(rgba(0,255,65,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,65,.04) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+    .hero::after {
+      content:''; position:absolute; top:15%; right:-8%; z-index:0;
+      width:640px; height:640px; border-radius:50%;
+      background:radial-gradient(circle,rgba(0,255,65,.07) 0%,transparent 65%);
+      animation:orb 9s ease-in-out infinite alternate;
+    }
+    .hero-content { position:relative; z-index:1; max-width:820px; }
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--mono); font-size:.72rem; font-weight:500; color:var(--green); letter-spacing:.1em; margin-bottom:2rem; animation:fadeUp .6s .1s ease both; }
+    .dot-live { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 1.5s infinite; }
+    .hero-title { font-family:var(--mono); font-size:clamp(2.5rem,6.5vw,5rem); font-weight:800; line-height:1.08; letter-spacing:-.03em; color:var(--white); margin-bottom:1.8rem; animation:fadeUp .6s .2s ease both; }
+    .hero-title .tag { color:var(--green); text-shadow:0 0 30px rgba(0,255,65,.3); }
+    .cursor-blink { display:inline-block; width:3px; height:.85em; background:var(--green); margin-left:4px; vertical-align:middle; animation:blink 1s step-end infinite; box-shadow:0 0 10px var(--green); }
+    .hero-sub { font-family:var(--sans); font-size:1.1rem; line-height:1.8; color:var(--grey); max-width:500px; margin-bottom:2.5rem; animation:fadeUp .6s .3s ease both; }
+    .hero-sub strong { color:var(--white); font-weight:600; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:1rem; align-items:center; animation:fadeUp .6s .4s ease both; }
+    .btn-green { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--mono); font-size:.85rem; font-weight:800; letter-spacing:.04em; color:var(--black); background:var(--green); padding:.88rem 1.8rem; border-radius:4px; text-decoration:none; box-shadow:0 0 24px var(--green-glow); transition:box-shadow .2s,transform .2s; }
+    .btn-green:hover { box-shadow:0 0 44px rgba(0,255,65,.5); transform:translateY(-2px); }
+    .btn-outline { display:inline-flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.82rem; font-weight:600; letter-spacing:.04em; color:var(--green); background:transparent; padding:.88rem 1.6rem; border-radius:4px; text-decoration:none; border:1px solid var(--border); transition:background .2s,border-color .2s; }
+    .btn-outline:hover { border-color:var(--green); background:var(--green-dim); }
+    .hero-stats { display:flex; flex-wrap:wrap; gap:3rem; margin-top:4rem; padding-top:2.5rem; border-top:1px solid var(--border2); animation:fadeUp .6s .5s ease both; }
+    .stat { display:flex; flex-direction:column; gap:.2rem; }
+    .stat-num { font-family:var(--mono); font-size:1.9rem; font-weight:800; color:var(--green); line-height:1; text-shadow:0 0 20px rgba(0,255,65,.4); }
+    .stat-label { font-family:var(--mono); font-size:.62rem; color:var(--grey); letter-spacing:.1em; text-transform:uppercase; }
+
+    /* ── PROVOCATIVE BAND ── */
+    .provo-band {
+      background:var(--green); padding:1.1rem 6vw;
+      display:flex; align-items:center; justify-content:center; gap:.8rem;
+      overflow:hidden;
+    }
+    .provo-band p {
+      font-family:var(--mono); font-size:.9rem; font-weight:700;
+      color:var(--black); text-align:center; letter-spacing:.02em;
+      line-height:1.5;
+    }
+    .provo-band p em { font-style:normal; text-decoration:underline; text-decoration-thickness:2px; }
+
+    /* ── SECTION BASE ── */
+    section { padding:7rem 6vw; }
+    .section-tag { display:inline-flex; align-items:center; gap:.4rem; font-family:var(--mono); font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--green); margin-bottom:.8rem; }
+    .section-tag::before { content:'//'; opacity:.55; }
+    .section-title { font-family:var(--mono); font-size:clamp(1.7rem,3.8vw,2.8rem); font-weight:800; letter-spacing:-.02em; line-height:1.1; color:var(--white); margin-bottom:1rem; }
+    .section-title .g { color:var(--green); }
+    .section-sub { font-family:var(--sans); font-size:.98rem; color:var(--grey); line-height:1.75; max-width:500px; }
+    .section-sub strong { color:var(--white); }
+    .divider { width:34px; height:2px; background:var(--green); box-shadow:0 0 8px var(--green); border-radius:2px; margin:1rem 0 2rem; }
+
+    /* ── SHOWCASE ── */
+    #showcase { background:var(--darker); overflow:hidden; }
+
+    /* Carousel container — clips overflow, allows touch drag */
+    .carousel-outer {
+      position:relative; overflow:hidden; cursor:grab; margin-top:3rem;
+      user-select:none; -webkit-user-select:none;
+    }
+    .carousel-outer.dragging { cursor:grabbing; }
+    .carousel-track {
+      display:flex; gap:1.5rem;
+      will-change:transform;
+      /* transition only applied when NOT dragging */
+    }
+    .carousel-track.snapping { transition:transform .45s cubic-bezier(.4,0,.2,1); }
+
+    .carousel-card {
+      flex:0 0 calc(33.333% - 1rem); min-width:280px;
+      background:var(--surface); border:1px solid var(--border2);
+      border-radius:8px; overflow:hidden;
+      transition:border-color .3s,box-shadow .3s;
+      pointer-events:none; /* prevent text selection during drag */
+    }
+    .carousel-card:hover { border-color:rgba(0,255,65,.3); box-shadow:0 12px 40px rgba(0,255,65,.08); }
+
+    /* Real photo card image */
+    .card-img {
+      width:100%; height:200px; position:relative; overflow:hidden;
+    }
+    .card-img img {
+      width:100%; height:100%; object-fit:cover;
+      display:block; filter:brightness(.75) saturate(.9);
+      transition:filter .35s, transform .35s;
+    }
+    .carousel-card:hover .card-img img { filter:brightness(.9) saturate(1.1); transform:scale(1.04); }
+    /* browser chrome bar */
+    .card-img::before {
+      content:'● ● ●'; position:absolute; top:0; left:0; right:0; z-index:2;
+      background:rgba(0,0,0,.65); color:rgba(255,255,255,.22);
+      font-size:.48rem; letter-spacing:.15em; padding:.42rem .9rem;
+      font-family:var(--mono);
+    }
+    /* scanline overlay on photo */
+    .card-img::after {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.1) 3px,rgba(0,0,0,.1) 4px);
+      pointer-events:none;
+    }
+    .card-body { padding:1.4rem; }
+    .card-type { font-family:var(--mono); font-size:.63rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--green); margin-bottom:.5rem; }
+    .card-title { font-family:var(--mono); font-size:.95rem; font-weight:700; color:var(--white); margin-bottom:.5rem; }
+    .card-desc { font-family:var(--sans); font-size:.8rem; color:var(--grey); line-height:1.6; margin-bottom:1rem; }
+    .card-cta { display:block; text-align:center; font-family:var(--mono); font-size:.73rem; font-weight:700; letter-spacing:.03em; color:var(--green); text-decoration:none; border:1px dashed rgba(0,255,65,.3); border-radius:4px; padding:.7rem; transition:background .2s,border-color .2s; }
+    .card-cta:hover { background:var(--green-dim); border-color:var(--green); }
+
+    .carousel-controls { display:flex; align-items:center; justify-content:center; gap:1rem; margin-top:2.5rem; }
+    .carousel-btn { width:40px; height:40px; border-radius:4px; background:var(--surface); border:1px solid var(--border2); color:var(--green); cursor:pointer; font-family:var(--mono); font-size:1rem; display:flex; align-items:center; justify-content:center; transition:border-color .2s,background .2s,box-shadow .2s; }
+    .carousel-btn:hover { border-color:var(--green); background:var(--green-dim); box-shadow:0 0 12px var(--green-glow); }
+    .carousel-dots { display:flex; gap:.5rem; }
+    .dot { width:6px; height:6px; border-radius:50%; background:var(--grey2); cursor:pointer; transition:background .2s,width .3s; }
+    .dot.active { background:var(--green); width:22px; border-radius:3px; box-shadow:0 0 8px var(--green); }
+
+    /* ── ABOUT ── */
+    #about { background:var(--dark); display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .about-terminal { background:var(--surface); border:1px solid var(--border); border-radius:8px; overflow:hidden; box-shadow:0 0 60px rgba(0,255,65,.06); }
+    .terminal-bar { background:var(--surface2); padding:.65rem 1rem; display:flex; align-items:center; gap:.5rem; border-bottom:1px solid var(--border2); }
+    .t-dot { width:10px; height:10px; border-radius:50%; }
+    .t-title { font-family:var(--mono); font-size:.7rem; color:var(--grey2); margin:0 auto; letter-spacing:.05em; }
+    .terminal-body { padding:1.8rem 1.5rem; font-family:var(--mono); font-size:.8rem; line-height:2.1; }
+    .t-comment { color:var(--grey2); font-style:italic; }
+    .t-key { color:var(--green); }
+    .t-val { color:#6af; }
+    .t-str { color:#fa0; }
+    .t-prompt { color:var(--green); }
+    .t-cursor { display:inline-block; width:8px; height:1em; background:var(--green); animation:blink 1s step-end infinite; box-shadow:0 0 6px var(--green); vertical-align:middle; }
+    .about-text .section-sub { max-width:100%; }
+    .perks { margin-top:2rem; display:flex; flex-direction:column; gap:1rem; }
+    .perk { display:flex; gap:.9rem; padding:1rem 1.2rem; background:var(--surface); border:1px solid var(--border2); border-radius:6px; transition:border-color .25s; }
+    .perk:hover { border-color:rgba(0,255,65,.3); }
+    .perk-ico { font-family:var(--mono); font-size:.78rem; font-weight:700; color:var(--green); flex-shrink:0; padding-top:.2rem; }
+    .perk-title { font-family:var(--mono); font-size:.83rem; font-weight:700; color:var(--white); margin-bottom:.2rem; }
+    .perk-desc { font-family:var(--sans); font-size:.78rem; color:var(--grey); line-height:1.55; }
+
+    /* ── PROCESS ── */
+    #process { background:var(--black); }
+    .process-center { text-align:center; max-width:600px; margin:0 auto 1rem; }
+    .process-center .section-sub { margin:0 auto; }
+    .process-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; margin-top:3rem; background:var(--border2); border:1px solid var(--border2); border-radius:8px; overflow:hidden; }
+    .process-step { background:var(--surface); padding:2rem 1.5rem; position:relative; transition:background .3s; }
+    .process-step:hover { background:var(--surface2); }
+    .step-num { font-family:var(--mono); font-size:2.4rem; font-weight:800; color:var(--green); opacity:.12; line-height:1; margin-bottom:.8rem; text-shadow:0 0 20px var(--green); transition:opacity .3s; }
+    .process-step:hover .step-num { opacity:.4; }
+    .step-badge { position:absolute; top:.8rem; right:.8rem; font-family:var(--mono); font-size:.58rem; color:var(--green); opacity:.35; }
+    .step-title { font-family:var(--mono); font-size:.83rem; font-weight:700; color:var(--white); margin-bottom:.5rem; }
+    .step-desc { font-family:var(--sans); font-size:.76rem; color:var(--grey); line-height:1.6; }
+
+    /* ── INSTAGRAM CALLOUT ── */
+    .insta-callout {
+      background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      padding:4rem 6vw; text-align:center;
+    }
+    .insta-callout p {
+      font-family:var(--mono); font-size:clamp(1rem,2.5vw,1.5rem); font-weight:700;
+      color:var(--grey); line-height:1.6; max-width:700px; margin:0 auto;
+    }
+    .insta-callout p .hl {
+      color:var(--green); text-shadow:0 0 20px rgba(0,255,65,.35);
+      font-weight:800;
+    }
+    .insta-callout p .hl-white { color:var(--white); font-weight:800; }
+
+    /* ── CONTACT ── */
+    #contact { background:var(--darker); }
+    .contact-inner { max-width:680px; margin:3rem auto 0; display:flex; flex-direction:column; gap:2rem; }
+
+    /* Provocative box */
+    .provo-box {
+      border:1px solid var(--border); border-radius:8px; padding:2rem;
+      background:var(--surface);
+      position:relative; overflow:hidden;
+    }
+    .provo-box::before {
+      content:''; position:absolute; top:-40px; right:-40px;
+      width:200px; height:200px; border-radius:50%;
+      background:radial-gradient(circle,rgba(0,255,65,.08) 0%,transparent 70%);
+    }
+    .provo-quote {
+      font-family:var(--mono); font-size:clamp(.9rem,2vw,1.15rem); font-weight:700;
+      color:var(--white); line-height:1.65; position:relative; z-index:1;
+    }
+    .provo-quote .hl { color:var(--green); text-shadow:0 0 18px rgba(0,255,65,.3); }
+    .provo-quote .dim { color:var(--grey); font-weight:400; }
+    .provo-by { font-family:var(--mono); font-size:.65rem; color:var(--grey2); margin-top:1rem; letter-spacing:.08em; position:relative; z-index:1; }
+
+    /* WA Direct button block */
+    .wa-direct {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:8px; padding:2rem;
+      display:flex; flex-direction:column; align-items:flex-start; gap:1.2rem;
+    }
+    .wa-direct-label { font-family:var(--mono); font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--green); }
+    .wa-direct-label::before { content:'// '; opacity:.5; }
+    .wa-direct-title { font-family:var(--mono); font-size:1.1rem; font-weight:800; color:var(--white); }
+    .wa-direct-sub { font-family:var(--sans); font-size:.85rem; color:var(--grey); line-height:1.6; }
+    .btn-wa { display:inline-flex; align-items:center; gap:.6rem; background:#25d366; color:#fff; font-family:var(--mono); font-weight:700; font-size:.82rem; letter-spacing:.03em; padding:.85rem 1.8rem; border-radius:4px; text-decoration:none; box-shadow:0 0 20px rgba(37,211,102,.3); transition:box-shadow .2s,transform .2s; }
+    .btn-wa:hover { box-shadow:0 0 36px rgba(37,211,102,.5); transform:translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer { background:var(--darker); border-top:1px solid var(--border2); padding:2rem 6vw; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-logo { font-family:var(--mono); font-weight:800; font-size:1rem; color:var(--white); }
+    .footer-logo .b { color:var(--green); }
+    footer p { font-family:var(--mono); font-size:.62rem; color:var(--grey2); }
+
+    /* ── FLOAT WA ── */
+    .float-wa { position:fixed; bottom:1.8rem; right:1.8rem; z-index:300; width:56px; height:56px; border-radius:50%; background:#25d366; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; text-decoration:none; box-shadow:0 0 24px rgba(37,211,102,.4); animation:bounce 2.5s ease-in-out infinite; }
+    .float-wa:hover { transform:scale(1.1); animation:none; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .6s,transform .6s; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(18px)}  to{opacity:1;transform:translateY(0)} }
+    @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes bounce   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    @keyframes orb      { from{transform:translate(0,0) scale(1)} to{transform:translate(-5%,5%) scale(1.12)} }
+
+    @media(max-width:1100px){ .process-grid{grid-template-columns:repeat(3,1fr)} }
+    @media(max-width:900px){
+      .nav-links,.nav-cta{display:none} .hamburger{display:flex}
+      #about{grid-template-columns:1fr; gap:2.5rem}
+      .carousel-card{flex:0 0 82%}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:600px){
+      section{padding:4rem 5vw} .hero{padding:7rem 5vw 4rem}
+      .hero-stats{gap:2rem} .process-grid{grid-template-columns:1fr}
+      footer{flex-direction:column;text-align:center}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo-svg" href="#"><span class="b">&lt;</span>pires<span class="b">/&gt;</span></a>
+  <ul class="nav-links">
+    <li><a href="#showcase">portfólio</a></li>
+    <li><a href="#about">sobre</a></li>
+    <li><a href="#process">processo</a></li>
+    <li><a href="#contact">contato</a></li>
+  </ul>
+  <a href="https://wa.me/47996947792?text=quero%20alavancar%20meu%20neg%C3%B3cio%2C%20como%20voc%C3%AA%20pode%20me%20ajudar%3F" target="_blank" class="nav-cta">$ iniciar →</a>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileClose">✕</button>
+  <a href="#showcase" onclick="closeMobileNav()">&lt;portfólio/&gt;</a>
+  <a href="#about" onclick="closeMobileNav()">&lt;sobre/&gt;</a>
+  <a href="#process" onclick="closeMobileNav()">&lt;processo/&gt;</a>
+  <a href="#contact" onclick="closeMobileNav()">&lt;contato/&gt;</a>
+  <a href="https://wa.me/47996947792?text=quero%20alavancar%20meu%20neg%C3%B3cio%2C%20como%20voc%C3%AA%20pode%20me%20ajudar%3F" target="_blank" style="color:var(--green)">$ iniciar agora →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="dot-live"></span>online &amp; pronto para vender</div>
+    <h1 class="hero-title">
+      Sites que<br>
+      <span class="tag">&lt;vendem/&gt;</span><br>
+      não só existem.<span class="cursor-blink"></span>
+    </h1>
+    <p class="hero-sub">
+      Presença digital profissional para pequenos negócios em <strong>até 5 dias</strong>.
+      Design moderno, código limpo, foco em resultado real.
+    </p>
+    <div class="hero-actions">
+      <a href="https://wa.me/47996947792?text=quero%20alavancar%20meu%20neg%C3%B3cio%2C%20como%20voc%C3%AA%20pode%20me%20ajudar%3F" target="_blank" class="btn-green">💬 falar no whatsapp</a>
+      <a href="#showcase" class="btn-outline">ver exemplos ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">05</span><span class="stat-label">dias p/ entrega</span></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">responsivo</span></div>
+      <div class="stat"><span class="stat-num">∞</span><span class="stat-label">suporte</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROVOCATIVE BAND -->
+<div class="provo-band">
+  <p>Seu negócio só tem Instagram? &nbsp;·&nbsp; <em>Garanta sua presença online</em> em tempo recorde! &nbsp;·&nbsp; Seu concorrente já tem site… e você? &nbsp;·&nbsp; <em>Garanta sua presença online</em> em tempo recorde!</p>
+</div>
+
+<!-- SHOWCASE -->
+<section id="showcase">
+  <div class="section-tag">portfólio</div>
+  <h2 class="section-title">Algo assim poderia estar<br>no <span class="g">seu site</span></h2>
+  <p class="section-sub">Negócios como o seu com presença digital profissional. <strong>Seu produto poderia estar aqui.</strong></p>
+  <div class="divider"></div>
+
+  <div class="carousel-outer" id="carouselOuter">
+    <div class="carousel-track" id="carouselTrack">
+
+      <div class="carousel-card">
+        <div class="card-img">
+          <img src="img_barber.jpg" alt="Barbearia" draggable="false">
+        </div>
+        <div class="card-body">
+          <div class="card-type">barbearia &amp; estética</div>
+          <div class="card-title">seu produto poderia estar aqui</div>
+          <div class="card-desc">Agendamentos online, galeria de cortes, avaliações e botão direto para WhatsApp.</div>
+          <a href="#contact" class="card-cta">→ quero um site assim</a>
+        </div>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-img">
+          <img src="img_restaurant.jpg" alt="Restaurante" draggable="false">
+        </div>
+        <div class="card-body">
+          <div class="card-type">restaurante &amp; delivery</div>
+          <div class="card-title">seu produto poderia estar aqui</div>
+          <div class="card-desc">Cardápio digital, pedidos via WhatsApp, promoções e localização integrada.</div>
+          <a href="#contact" class="card-cta">→ quero um site assim</a>
+        </div>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-img">
+          <img src="img_gym.jpg" alt="Academia" draggable="false">
+        </div>
+        <div class="card-body">
+          <div class="card-type">academia &amp; personal</div>
+          <div class="card-title">seu produto poderia estar aqui</div>
+          <div class="card-desc">Planos de treino, assinaturas, aulas em grupo e captação de alunos 24h.</div>
+          <a href="#contact" class="card-cta">→ quero um site assim</a>
+        </div>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-img">
+          <img src="img_clinic.jpg" alt="Clínica" draggable="false">
+        </div>
+        <div class="card-body">
+          <div class="card-type">clínica &amp; consultório</div>
+          <div class="card-title">seu produto poderia estar aqui</div>
+          <div class="card-desc">Consultas, especialidades, equipe e formulário de agendamento integrado.</div>
+          <a href="#contact" class="card-cta">→ quero um site assim</a>
+        </div>
+      </div>
+
+      <div class="carousel-card">
+        <div class="card-img">
+          <img src="img_store.jpg" alt="Loja" draggable="false">
+        </div>
+        <div class="card-body">
+          <div class="card-type">loja &amp; comércio</div>
+          <div class="card-title">seu produto poderia estar aqui</div>
+          <div class="card-desc">Catálogo, PIX integrado, carrinho virtual e pedidos via WhatsApp.</div>
+          <a href="#contact" class="card-cta">→ quero um site assim</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="carousel-controls">
+    <button class="carousel-btn" id="prevBtn">←</button>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <button class="carousel-btn" id="nextBtn">→</button>
+  </div>
+</section>
+
+<!-- INSTAGRAM CALLOUT -->
+<div class="insta-callout">
+  <p>
+    Seu negócio <span class="hl-white">só tem Instagram?</span><br>
+    Garanta sua <span class="hl">presença online</span> em tempo recorde —<br>
+    antes que seu concorrente ocupe esse espaço.
+  </p>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-terminal reveal">
+    <div class="terminal-bar">
+      <div class="t-dot" style="background:#ff5f57"></div>
+      <div class="t-dot" style="background:#febc2e"></div>
+      <div class="t-dot" style="background:#28c840"></div>
+      <div class="t-title">pires@webdesign — apresentacao.js</div>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-comment">// quem é você?</span></div>
+      <div><span class="t-prompt">$ </span><span style="color:#fff">const dev = {</span></div>
+      <div>&nbsp;&nbsp;<span class="t-key">nome</span>: <span class="t-str">"Pires Webdesign"</span>,</div>
+      <div>&nbsp;&nbsp;<span class="t-key">foco</span>: <span class="t-str">"pequenos negócios"</span>,</div>
+      <div>&nbsp;&nbsp;<span class="t-key">entrega</span>: <span class="t-val">5</span>, <span class="t-comment">// dias</span></div>
+      <div>&nbsp;&nbsp;<span class="t-key">stack</span>: [<span class="t-str">"HTML"</span>, <span class="t-str">"CSS"</span>, <span class="t-str">"JS"</span>, <span class="t-str">"IA"</span>],</div>
+      <div>&nbsp;&nbsp;<span class="t-key">suporte</span>: <span class="t-val">true</span>,</div>
+      <div>&nbsp;&nbsp;<span class="t-key">resultado</span>: <span class="t-str">"clientes reais"</span></div>
+      <div><span style="color:#fff">}</span></div>
+      <br>
+      <div><span class="t-prompt">$ </span><span style="color:#fff">dev.missao()</span></div>
+      <div style="color:var(--green)">► "Você não precisa de código. Você precisa de clientes."</div>
+      <br>
+      <div><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
+    </div>
+  </div>
+
+  <div class="about-text">
+    <div class="section-tag">sobre</div>
+    <h2 class="section-title">Aqui você poderia<br>se apresentar ao <span class="g">mundo</span></h2>
+    <div class="divider"></div>
+    <p class="section-sub">Esta seção existe para <strong>você contar sua história</strong> — quem você é, o que faz de melhor e por que os clientes devem te escolher. Uma apresentação honesta vale mais que qualquer propaganda.</p>
+    <div class="perks">
+      <div class="perk">
+        <div class="perk-ico">[01]</div>
+        <div><div class="perk-title">Entrega rápida, sem enrolação</div><div class="perk-desc">Site pronto em até 5 dias úteis. Sem esperar meses para estar online.</div></div>
+      </div>
+      <div class="perk">
+        <div class="perk-ico">[02]</div>
+        <div><div class="perk-title">Focado em resultado, não em código</div><div class="perk-desc">O objetivo é atrair mais clientes para o seu negócio, não impressionar tecnicamente.</div></div>
+      </div>
+      <div class="perk">
+        <div class="perk-ico">[03]</div>
+        <div><div class="perk-title">Suporte contínuo e parceria real</div><div class="perk-desc">Não sumo após a entrega. Ajustes, dúvidas e crescimento juntos.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="process-center">
+    <div class="section-tag">processo</div>
+    <h2 class="section-title">Do zero ao ar<br>em <span class="g">5 dias</span></h2>
+    <p class="section-sub">Simples, transparente e sem surpresas desagradáveis.</p>
+  </div>
+  <div class="process-grid reveal">
+    <div class="process-step"><div class="step-badge">step_01</div><div class="step-num">01</div><div class="step-title">Primeiro contato</div><div class="step-desc">Conversamos pelo WhatsApp para entender seu negócio e necessidades.</div></div>
+    <div class="process-step"><div class="step-badge">step_02</div><div class="step-num">02</div><div class="step-title">Planejamento</div><div class="step-desc">Definimos estrutura, coletamos textos e imagens do seu negócio.</div></div>
+    <div class="process-step"><div class="step-badge">step_03</div><div class="step-num">03</div><div class="step-title">Desenvolvimento</div><div class="step-desc">Criamos o site com design moderno e personalizado para você.</div></div>
+    <div class="process-step"><div class="step-badge">step_04</div><div class="step-num">04</div><div class="step-title">Revisão</div><div class="step-desc">Você aprova e pedimos ajustes. Sua aprovação é essencial.</div></div>
+    <div class="process-step"><div class="step-badge">step_05</div><div class="step-num">05</div><div class="step-title">No ar! 🚀</div><div class="step-desc">Site publicado, testado e entregue com suporte garantido.</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">contato</div>
+  <h2 class="section-title">Bora colocar seu<br>negócio <span class="g">online?</span></h2>
+  <div class="divider"></div>
+
+  <div class="contact-inner">
+
+    <!-- Provocative quote -->
+    <div class="provo-box reveal">
+      <div class="provo-quote">
+        <span class="dim">fazer um orçamento</span> não custa nada,<br>
+        mas <span class="hl">seu concorrente já tem site…</span><br>
+        <span class="dim">e você?</span>
+      </div>
+      <div class="provo-by">// pires webdesign · orçamento 100% grátis · sem compromisso</div>
+    </div>
+
+    <!-- WhatsApp direct -->
+    <div class="wa-direct reveal">
+      <div class="wa-direct-label">contato direto</div>
+      <div class="wa-direct-title">💬 Fale agora pelo WhatsApp</div>
+      <div class="wa-direct-sub">Clique abaixo e me mande uma mensagem agora mesmo. Respondo rápido — sem enrolação, sem formulário, sem espera.</div>
+      <a href="https://wa.me/47996947792?text=quero%20alavancar%20meu%20neg%C3%B3cio%2C%20como%20voc%C3%AA%20pode%20me%20ajudar%3F" target="_blank" class="btn-wa">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        iniciar conversa agora
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span class="b">&lt;</span>pires<span class="b">/&gt;</span></div>
+  <p>// © 2025 Pires Webdesign · todos os direitos reservados</p>
+  <p>// feito com ❤️ para pequenos negócios</p>
+</footer>
+
+<!-- FLOATING WA -->
+<a href="https://wa.me/47996947792?text=quero%20alavancar%20meu%20neg%C3%B3cio%2C%20como%20voc%C3%AA%20pode%20me%20ajudar%3F" class="float-wa" target="_blank" title="Fale agora no WhatsApp">💬</a>
+
+<script>
+  /* ── HAMBURGER ── */
+  document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobileNav').classList.add('open'));
+  document.getElementById('mobileClose').addEventListener('click', closeMobileNav);
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+  /* ── CAROUSEL WITH DRAG / SWIPE + MOMENTUM PAUSE ── */
+  (function(){
+    const outer  = document.getElementById('carouselOuter');
+    const track  = document.getElementById('carouselTrack');
+    const dotsWrap = document.getElementById('carouselDots');
+    const cards  = Array.from(track.querySelectorAll('.carousel-card'));
+    let current  = 0;
+    let autoTimer = null;
+    let pauseTimer = null;
+
+    // Drag state
+    let isDragging = false;
+    let startX = 0;
+    let startTranslate = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animFrame = null;
+
+    function getVis() { return window.innerWidth < 700 ? 1 : window.innerWidth < 1050 ? 2 : 3; }
+    function cardW()  { return cards[0].offsetWidth + 24; }
+    function maxIdx() { return cards.length - getVis(); }
+
+    /* Build dots */
+    for (let i = 0; i < cards.length; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => { goTo(i); pauseAutoplay(4000); });
+      dotsWrap.appendChild(d);
+    }
+    const dots = dotsWrap.querySelectorAll('.dot');
+
+    function updateDots(idx) {
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    function setTranslate(x, animate) {
+      if (animate) {
+        track.classList.add('snapping');
+      } else {
+        track.classList.remove('snapping');
+      }
+      track.style.transform = `translateX(${x}px)`;
+    }
+
+    function goTo(idx, animate = true) {
+      current = Math.max(0, Math.min(idx, maxIdx()));
+      currentTranslate = -(current * cardW());
+      prevTranslate = currentTranslate;
+      setTranslate(currentTranslate, animate);
+      updateDots(current);
+    }
+
+    /* Pause autoplay for `ms` ms then resume */
+    function pauseAutoplay(ms) {
+      clearTimeout(pauseTimer);
+      clearInterval(autoTimer);
+      pauseTimer = setTimeout(startAutoplay, ms);
+    }
+
+    function startAutoplay() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        goTo(current >= maxIdx() ? 0 : current + 1);
+      }, 4200);
+    }
+
+    /* Arrow buttons */
+    document.getElementById('prevBtn').addEventListener('click', () => { goTo(current - 1); pauseAutoplay(5000); });
+    document.getElementById('nextBtn').addEventListener('click', () => { goTo(current + 1); pauseAutoplay(5000); });
+    window.addEventListener('resize', () => goTo(current, false));
+
+    /* ── POINTER / TOUCH DRAG ── */
+    function getClientX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
+    function onDragStart(e) {
+      if (e.button && e.button !== 0) return; // only left click
+      isDragging = true;
+      startX = getClientX(e);
+      startTranslate = currentTranslate;
+      outer.classList.add('dragging');
+      track.classList.remove('snapping');
+      clearInterval(autoTimer);
+      cancelAnimationFrame(animFrame);
+    }
+
+    function onDragMove(e) {
+      if (!isDragging) return;
+      const diff = getClientX(e) - startX;
+      currentTranslate = startTranslate + diff;
+      // Rubber-band resistance at edges
+      const minT = -(maxIdx() * cardW());
+      if (currentTranslate > 0)        currentTranslate = currentTranslate * 0.25;
+      if (currentTranslate < minT)     currentTranslate = minT + (currentTranslate - minT) * 0.25;
+      animFrame = requestAnimationFrame(() => setTranslate(currentTranslate, false));
+    }
+
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      outer.classList.remove('dragging');
+
+      const diff = currentTranslate - startTranslate;
+      const threshold = cardW() * 0.2; // 20% of card width to snap
+
+      if (diff < -threshold) {
+        current = Math.min(current + 1, maxIdx());
+      } else if (diff > threshold) {
+        current = Math.max(current - 1, 0);
+      }
+
+      goTo(current); // snap with animation
+      updateDots(current);
+
+      // Pause autoplay for 5s after user interaction
+      pauseAutoplay(5000);
+    }
+
+    // Mouse events
+    outer.addEventListener('mousedown', onDragStart);
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('mouseup', onDragEnd);
+
+    // Touch events
+    outer.addEventListener('touchstart', onDragStart, { passive: true });
+    outer.addEventListener('touchmove', onDragMove, { passive: true });
+    outer.addEventListener('touchend', onDragEnd);
+
+    // Prevent context menu during drag
+    outer.addEventListener('contextmenu', e => { if (isDragging) e.preventDefault(); });
+
+    // Re-enable card links after non-drag click
+    outer.addEventListener('click', e => {
+      if (Math.abs(currentTranslate - startTranslate) > 5) e.preventDefault();
+    });
+
+    // Make card links work again (pointer-events:none was set on cards, restore for links only)
+    cards.forEach(card => {
+      card.style.pointerEvents = 'auto';
+      card.querySelectorAll('a').forEach(a => a.style.pointerEvents = 'auto');
+    });
+
+    startAutoplay();
+  })();
+
+  /* ── REVEAL ON SCROLL ── */
+  const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+</script>
+</body>
+</html>
